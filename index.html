@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DIY Sim Rig</title>
+<meta name="description" content="แบบ Full Cockpit Sim Racing โครงเหล็ก ถอดแยกได้ ปรับเบาะ แป้นเหยียบ แท่นพวงมาลัย และขาเกียร์ — ดูแบบ 3D แปลน และวิธีทำ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="logo" aria-hidden="true"></span>
+    <div>
+      <h1>DIY Sim Rig</h1>
+      <p>Full cockpit โครงเหล็ก · ถอดแยกได้ 6 ชุด · ปรับเบาะ / แป้น / พวงมาลัย / เกียร์</p>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="view3d" aria-selected="true">แบบ 3D</button>
+    <button role="tab" data-tab="plans">แบบแปลน</button>
+    <button role="tab" data-tab="guide">วัสดุ &amp; วิธีทำ</button>
+  </nav>
+</header>
+
+<main>
+  <section id="view3d" class="tab active">
+    <div class="viewer-wrap">
+      <div id="viewer" class="viewer"></div>
+      <div class="view-btns">
+        <button data-view="iso">มุมเฉียง</button>
+        <button data-view="side">ด้านข้าง</button>
+        <button data-view="top">ด้านบน</button>
+        <button data-view="front">ด้านหน้า</button>
+        <button data-view="driver">มุมคนขับ</button>
+      </div>
+      <div id="loadmsg" class="loadmsg">กำลังโหลดโมเดล 3D…</div>
+    </div>
+    <aside class="panel">
+      <div class="card">
+        <label class="switch"><input type="checkbox" id="explode"><span>แยกชิ้น (Exploded view)</span></label>
+        <label class="switch"><input type="checkbox" id="colormode" checked><span>สีแยกตามโมดูล</span></label>
+      </div>
+      <div class="card">
+        <h3>โมดูล</h3>
+        <div id="legend" class="legend"></div>
+      </div>
+      <div class="card">
+        <h3>ปรับเบาะ</h3>
+        <div class="ctl" data-key="seatHole" data-min="0" data-max="4" data-step="1" data-fmt="seatHole">ตำแหน่งคานเบาะ (รูบนราง)</div>
+        <div class="ctl" data-key="seatSlide" data-min="0" data-max="180" data-step="10" data-fmt="mm">รางสไลด์ (ละเอียด)</div>
+        <div class="ctl" data-key="seatRow" data-min="0" data-max="2" data-step="1" data-fmt="row">ความสูง (แถวรู)</div>
+        <div class="ctl" data-key="seatTilt" data-min="0" data-max="8" data-step="1" data-fmt="deg">มุมเงยเบาะ</div>
+      </div>
+      <div class="card">
+        <h3>แท่นพวงมาลัย</h3>
+        <div class="ctl" data-key="deckHole" data-min="0" data-max="10" data-step="1" data-fmt="deckHole">ความสูง (รูที่เสา)</div>
+        <div class="ctl" data-key="deckTilt" data-min="0" data-max="20" data-step="1" data-fmt="deg">มุมก้ม</div>
+      </div>
+      <div class="card">
+        <h3>แป้นเหยียบ</h3>
+        <div class="ctl" data-key="sledHole" data-min="0" data-max="9" data-step="1" data-fmt="sledHole">ระยะหน้า-หลัง</div>
+        <div class="ctl" data-key="pedalAngle" data-min="15" data-max="45" data-step="1" data-fmt="deg">มุมแผ่นแป้น</div>
+      </div>
+      <div class="card">
+        <h3>ขาเกียร์</h3>
+        <div class="ctl" data-key="shifterHole" data-min="0" data-max="4" data-step="1" data-fmt="shHole">ระยะหน้า-หลัง</div>
+        <div class="ctl" data-key="shifterH" data-min="150" data-max="400" data-step="10" data-fmt="shH">ความสูงแคลมป์</div>
+      </div>
+      <p class="note">ลากเพื่อหมุน · ล้อเมาส์/ถ่างนิ้วเพื่อซูม · คลิกขวา/สองนิ้วเพื่อเลื่อน</p>
+    </aside>
+  </section>
+
+  <section id="plans" class="tab">
+    <div class="plans-head">
+      <h2>แบบแปลน</h2>
+      <p>หน่วยเป็นมิลลิเมตร · รูเจาะ Ø11 สำหรับน็อต M10 ทุกจุด เว้นแต่ระบุ · ขนาดทั้งหมดดึงจากไฟล์เดียวกับโมเดล 3D (<code>assets/js/params.js</code>)</p>
+      <button id="printbtn" class="ghostbtn">พิมพ์ / บันทึก PDF</button>
+    </div>
+    <div id="drawings" class="drawings"></div>
+  </section>
+
+  <section id="guide" class="tab">
+    <div class="guide-layout">
+      <nav id="toc" class="toc"></nav>
+      <article id="doc" class="doc">กำลังโหลดเอกสาร…</article>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
